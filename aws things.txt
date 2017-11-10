@@ -1,0 +1,6 @@
+disk management,
+boot sequence,
+process control,
+kernel management,
+application installation and most importantly,
+how to troubleshoot effectively when things go wrong.
