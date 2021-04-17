@@ -20,9 +20,6 @@
 		"InstanceType": {
 			"Type": "String"
 		},
-		"IamInstanceProfile": {
-			"Type": "String"
-		},
 		"SecurityGroup": {
 			"Type": "String"
 		},
