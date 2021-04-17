@@ -1,0 +1,111 @@
+{
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Description": "EC2-demo",
+	"Parameters": {
+		"AppID": {
+			"Type": "String"
+		},
+		"UserID": {
+			"Type": "String"
+		},
+		"Role": {
+			"Type": "String"
+		},
+		"AmiID": {
+			"Type": "String"
+		},
+		"SubnetID": {
+			"Type": "String"
+		},
+		"InstanceType": {
+			"Type": "String"
+		},
+		"IamInstanceProfile": {
+			"Type": "String"
+		},
+		"SecurityGroup": {
+			"Type": "String"
+		},
+		"ENV": {
+			"Type": "String"
+		},
+		"InstanceTypeName": {
+			"Type": "String"
+		}
+	},
+	"Resources": {
+		"EC2Instance": {
+			"Type": "AWS::EC2::Instance",
+			"properties": {
+				"InstanceType": {
+					"Ref": "InstanceType"
+				},
+				"ImageId": {
+					"Ref": "AmiID"
+				},
+				"IamInstanceProfile": {
+					"Ref": "IamInstanceProfile"
+				},
+				"SubnetId": {
+					"Ref": "SubnetID"
+				},
+				"SecurityGroupIds": {
+					"Ref": "SecurityGroup"
+				},
+
+				"Tags": [{
+						"Key": "UserID",
+						"Value": {
+							"Ref": "UserID"
+						}
+					},
+					{
+						"Key": "Role",
+						"Value": {
+							"Ref": "Role"
+						}
+					}
+
+				]
+			}
+		}
+	},
+	"Volume1": {
+		"Type": "AWS::EC2::Volume",
+		"properties": {
+			"Size": "10",
+			"AvailabilityZone": {
+				"Fn::GetAtt": ["EC2Instance", "AvailabilityZone"]
+			},
+			"VolumeType": "gp2",
+			"Tags": [{
+				"Key": "UserID",
+				"Value": {
+					"Ref": "UserID"
+				}
+			}]
+		}
+	},
+
+	"MountPoint1": {
+		"Type": "AWS::EC2::VolumeAttachment",
+		"properties": {
+			"InstanceId": {
+				"Ref": "EC2Instance"
+			},
+			"VolumeId": {
+				"Ref": "Volume1"
+			},
+			"Device": "dev/sd1"
+		}
+	},
+
+	"Outputs": {
+		"InstanceId": {
+			"Description": "InstaceId of the newlu created EC2Instance",
+			"Value": {
+				"Ref": "EC2Instance"
+			}
+		}
+	}
+}
