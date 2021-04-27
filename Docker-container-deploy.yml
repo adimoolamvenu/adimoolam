@@ -1,0 +1,25 @@
+---
+- hosts: All
+  become_user: root
+  become_method: sudo
+  become: true
+  tasks:
+
+  - name: Install pip
+    apt: name=python-pip state=present
+      
+  - name: install docker-py
+    pip: name=docker-py
+
+  - name: Pull default Docker image
+    docker_image:
+        name: "adimoolam.jfrog.io/docker-k8/nginx-adimoolam:1.0"
+        source: pull
+
+  - name: Running the container
+    docker_container:
+        image: adimoolam.jfrog.io/docker-k8/nginx-adimoolam:1.0
+        state: present
+        recreate: yes
+        ports:
+         - "80:80"
